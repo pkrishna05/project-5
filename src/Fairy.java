@@ -25,17 +25,25 @@ public final class Fairy implements Movable{
 
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> fairyTarget = world.findNearest(this.position, new ArrayList<>(List.of(Stump.class)));
+        Optional<Entity> fairyTarget = world.findNearest(this.position, new ArrayList<>(List.of(Stump.class, Corpse.class)));
 
         if (fairyTarget.isPresent()) {
             Point tgtPos = fairyTarget.get().getPosition();
 
             if (move(world, fairyTarget.get(), scheduler)) {
 
-                Actionable sapling = CreateEntity.createSapling(CreateEntity.SAPLING_KEY + "_" + fairyTarget.get().getId(), tgtPos, imageStore.getImageList(CreateEntity.SAPLING_KEY));
+                if(fairyTarget.get().getClass() == Corpse.class){
+                    DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.3, 0.12);
+                    world.addEntity(dude);
+                    dude.scheduleActions(world, imageStore, scheduler);
+                } else {
+                    Actionable sapling = CreateEntity.createSapling(CreateEntity.SAPLING_KEY + "_" + fairyTarget.get().getId(), tgtPos, imageStore.getImageList(CreateEntity.SAPLING_KEY));
 
-                world.addEntity(sapling);
-                sapling.scheduleActions(world, imageStore, scheduler);
+                    world.addEntity(sapling);
+                    sapling.scheduleActions(world, imageStore, scheduler);
+                }
+
+
             }
         }
 

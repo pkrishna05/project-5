@@ -42,7 +42,9 @@ public final class Killer implements Movable{
     public boolean move(WorldModel world, Entity target, EventScheduler scheduler) {
         // Fix this
         if (position.adjacent(target.getPosition())) {
+            Entity corpse = new Corpse("corpse", target.getPosition(), imageStore.getImageList("dude"));
            world.removeEntity(scheduler, target);
+           world.addEntity(corpse);
            this.executeActivity(world, imageStore, scheduler);
             return true;
         } else {
