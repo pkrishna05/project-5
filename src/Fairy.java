@@ -33,7 +33,7 @@ public final class Fairy implements Movable{
             if (move(world, fairyTarget.get(), scheduler)) {
 
                 if(fairyTarget.get().getClass() == Corpse.class){
-                    DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.3, 0.12);
+                    DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.4, 0.3);
                     world.addEntity(dude);
                     dude.scheduleActions(world, imageStore, scheduler);
                 } else {
