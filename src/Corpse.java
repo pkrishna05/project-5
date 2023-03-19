@@ -11,22 +11,23 @@ public final class Corpse implements Executable{
     private Point position;
     private final List<PImage> images;
     private int imageIndex;
-    private final double actionPeriod;
     private final double animationPeriod;
-
-    public Corpse(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
+    private int gracePeriod = 0;
+    private double actionPeriod;
+    public Corpse(String id, Point position, List<PImage> images, double animationPeriod, double actionPeriod) {
         this.id = id;
         this.position = position;
         this.images = images;
         this.imageIndex = 0;
-        this.actionPeriod = actionPeriod;
         this.animationPeriod = animationPeriod;
+        this.actionPeriod = actionPeriod;
     }
 
+    @Override
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
+        this.gracePeriod++;
+        System.out.println(gracePeriod);
         scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
-        scheduler.scheduleEvent(this, Animation.createAnimationAction(this, 0), getAnimationPeriod());
-
     }
 
     public double getAnimationPeriod() {
@@ -57,8 +58,12 @@ public final class Corpse implements Executable{
         this.imageIndex = index;
     }
 
-    public double getActionPeriod() {
-        return actionPeriod;
+    public int getGracePeriod(){
+        return this.gracePeriod;
     }
 
+    @Override
+    public double getActionPeriod() {
+        return 0;
+    }
 }

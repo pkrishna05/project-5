@@ -58,13 +58,14 @@ public final class WorldModel {
     }
 
     public void tryAddEntity(Entity entity) {
-        if (isOccupied(entity.getPosition())) {
+        if (!isOccupied(entity.getPosition())) {
             // arguably the wrong type of exception, but we are not
             // defining our own exceptions yet
-            throw new IllegalArgumentException("position occupied");
+            //throw new IllegalArgumentException("position occupied");
+            addEntity(entity);
         }
 
-        addEntity(entity);
+
     }
 
     public void parseDude(String[] properties, Point pt, String id, ImageStore imageStore) {
@@ -78,7 +79,7 @@ public final class WorldModel {
 
     public void parseFairy(String[] properties, Point pt, String id, ImageStore imageStore) {
         if (properties.length == FAIRY_NUM_PROPERTIES) {
-            Entity entity = CreateEntity.createFairy(id, pt, Double.parseDouble(properties[FAIRY_ACTION_PERIOD]) + 0.4, Double.parseDouble(properties[FAIRY_ANIMATION_PERIOD]), imageStore.getImageList(FAIRY_KEY));
+            Entity entity = CreateEntity.createFairy(id, pt, Double.parseDouble(properties[FAIRY_ACTION_PERIOD]), Double.parseDouble(properties[FAIRY_ANIMATION_PERIOD]), imageStore.getImageList(FAIRY_KEY));
             this.tryAddEntity(entity);
         }else{
             throw new IllegalArgumentException(String.format("%s requires %d properties when parsing", FAIRY_KEY, FAIRY_NUM_PROPERTIES));

@@ -104,12 +104,11 @@ public final class VirtualWorld extends PApplet {
         });
 
         // First check if space is not occupied
-        Killer killer = new Killer("blood_dude", pressed, imageStore.getImageList("killer"), 0.1, 0.2, imageStore);
-
-        world.addEntity(killer);
-
-        killer.scheduleActions(world, imageStore, scheduler);
-
+        if(!world.isOccupied(pressed)){
+            Killer killer = new Killer("blood_dude", pressed, imageStore.getImageList("killer"), 0.1, 0.01, imageStore);
+            world.tryAddEntity(killer);
+            killer.scheduleActions(world, imageStore, scheduler);
+        }
 
     }
 

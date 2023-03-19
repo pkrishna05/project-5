@@ -30,29 +30,34 @@ public final class Fairy implements Movable{
         if (fairyTarget.isPresent()) {
             Point tgtPos = fairyTarget.get().getPosition();
 
-            if (move(world, fairyTarget.get(), scheduler)) {
+            if (fairyTarget.get().getClass() == Corpse.class){
+                if(((Corpse) fairyTarget.get()).getGracePeriod() > 5){
+                    if(move(world, fairyTarget.get(), scheduler)){
+                        scheduler.unscheduleAllEvents(fairyTarget.get());
+                        DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.4, 0.3);
+                        world.addEntity(dude);
+                        dude.scheduleActions(world, imageStore, scheduler);
+                    }
 
-                if(fairyTarget.get().getClass() == Corpse.class){
-                    DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.4, 0.3);
-                    world.addEntity(dude);
-                    dude.scheduleActions(world, imageStore, scheduler);
-                } else {
+                }
+            } else {
+                if(move(world, fairyTarget.get(), scheduler)){
                     Actionable sapling = CreateEntity.createSapling(CreateEntity.SAPLING_KEY + "_" + fairyTarget.get().getId(), tgtPos, imageStore.getImageList(CreateEntity.SAPLING_KEY));
 
                     world.addEntity(sapling);
                     sapling.scheduleActions(world, imageStore, scheduler);
                 }
 
+            }
 
             }
-        }
 
         scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
     }
 
     public boolean move(WorldModel world, Entity target, EventScheduler scheduler) {
         if (position.adjacent(target.getPosition())) {
-            world.removeEntity(scheduler, target);
+            world.removeEntityAt(target.getPosition());
             return true;
         } else {
             Point nextPos = nextPosition(world, target.getPosition());
@@ -82,17 +87,11 @@ public final class Fairy implements Movable{
 
          */
 
-
-
         PathingStrategy path = new AStarPathingStrategy();
         List<Point> points = path.computePath(getPosition(), destPos, p ->  world.withinBounds(p) && !world.isOccupied(p),
                 (p1, p2) -> p1.adjacent(p2), PathingStrategy.CARDINAL_NEIGHBORS);
         return points.size() > 0 ? points.get(0) : getPosition();
-
-
-
     }
-
 
     public double getAnimationPeriod() {
         return animationPeriod;

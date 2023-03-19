@@ -22,21 +22,6 @@ public abstract class Dude implements Movable{
     }
 
     public Point nextPosition(WorldModel world, Point destPos) {
-        /*
-        int horiz = Integer.signum(destPos.getX() - getPosition().getX());
-        Point newPos = new Point(getPosition().getX() + horiz, getPosition().getY());
-
-        if (horiz == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != Stump.class) {
-            int vert = Integer.signum(destPos.getY() - getPosition().getY());
-            newPos = new Point(getPosition().getX(), getPosition().getY() + vert);
-
-            if (vert == 0 || world.isOccupied(newPos) && world.getOccupancyCell(newPos).getClass() != Stump.class) {
-                newPos = getPosition();
-            }
-        }
-
-        return newPos;
-        */
 
         PathingStrategy path = new AStarPathingStrategy();
 
@@ -47,8 +32,6 @@ public abstract class Dude implements Movable{
 
         //System.out.println(points.size());
         return points.size() > 0 ? points.get(0) : getPosition();
-
-
     }
 
     abstract boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore);
@@ -89,6 +72,4 @@ public abstract class Dude implements Movable{
     public double getActionPeriod() {
         return actionPeriod;
     }
-
-
 }

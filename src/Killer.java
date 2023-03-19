@@ -33,7 +33,6 @@ public final class Killer implements Movable{
         Optional<Entity> fullTarget = world.findNearest(getPosition(), new ArrayList<>(List.of(DudeNotFull.class, DudeFull.class)));
 
         if (fullTarget.isPresent() && move(world, fullTarget.get(), scheduler)) {
-            //move(world, scheduler, imageStore);
             move(world, fullTarget.get(), scheduler);
         } else {
             scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), getActionPeriod());
@@ -42,14 +41,15 @@ public final class Killer implements Movable{
     public boolean move(WorldModel world, Entity target, EventScheduler scheduler) {
         // Fix this
         if (position.adjacent(target.getPosition())) {
-            Corpse corpse = new Corpse("corpse", target.getPosition(), imageStore.getImageList("corpse"), 0.1, 1);
+                // Creats and adds corpse
+                Corpse corpse = new Corpse("corpse", target.getPosition(), imageStore.getImageList("corpse"), 0.1, 1);
+                world.removeEntity(scheduler, target); // Removes target from the world
+                world.addEntity(corpse);
 
-           world.removeEntity(scheduler, target);
-           world.addEntity(corpse);
-
-           corpse.executeActivity(world, imageStore, scheduler);
-           this.executeActivity(world, imageStore, scheduler);
-            return true;
+                // Executes corpse activity
+                corpse.executeActivity(world, imageStore, scheduler);
+                this.executeActivity(world, imageStore, scheduler); // Finds new dude target
+                return true;
         } else {
             Point nextPos = nextPosition(world, target.getPosition());
 
