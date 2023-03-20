@@ -72,39 +72,48 @@ public final class VirtualWorld extends PApplet {
         Point pressed = mouseToPoint();
         System.out.println("CLICK! " + pressed.getX() + ", " + pressed.getY());
 
-        final Function<Point, Stream<Point>> DIAGONAL_CARDINAL_NEIGHBORS =
-                point ->
-                        Stream.<Point>builder()
-                                .add(new Point(point.x - 1, point.y - 1))
-                                .add(new Point(point.x + 1, point.y + 1))
-                                .add(new Point(point.x - 1, point.y + 1))
-                                .add(new Point(point.x + 1, point.y - 1))
-                                .add(new Point(point.x, point.y - 1))
-                                .add(new Point(point.x, point.y + 1))
-                                .add(new Point(point.x, point.y + 2))
-                                .add(new Point(point.x, point.y - 2))
-                                .add(new Point(point.x - 1, point.y))
-                                .add(new Point(point.x - 2, point.y))
-                                .add(new Point(point.x + 1, point.y))
-                                .add(new Point(point.x + 2, point.y))
-                                .build();
+        if (!world.isOccupied(pressed)) {
 
-        // Sets background tiles
+            final Function<Point, Stream<Point>> DIAGONAL_CARDINAL_NEIGHBORS =
+                    point ->
+                            Stream.<Point>builder()
+                                    .add(new Point(point.x - 1, point.y - 1))
+                                    .add(new Point(point.x + 1, point.y + 1))
+                                    .add(new Point(point.x - 1, point.y + 1))
+                                    .add(new Point(point.x + 1, point.y - 1))
+                                    .add(new Point(point.x, point.y - 1))
+                                    .add(new Point(point.x, point.y + 1))
+                                    .add(new Point(point.x, point.y + 2))
+                                    .add(new Point(point.x, point.y - 2))
+                                    .add(new Point(point.x - 1, point.y))
+                                    .add(new Point(point.x - 2, point.y))
+                                    .add(new Point(point.x + 1, point.y))
+                                    .add(new Point(point.x + 2, point.y))
+                                    .build();
 
-        List<Point> neighbors = DIAGONAL_CARDINAL_NEIGHBORS
-                .apply(pressed)
-                .filter(p -> world.withinBounds(p))
-                .toList();
+            // Sets background tiles
 
-        neighbors.forEach(val -> {
-            // Transform dudes in this area
-            Background[][] background = world.getBackground();
-            background[val.getY()][val.getX()] = new Background("affected", imageStore.getImageList("blood"));
-            world.setBackground(background);
-        });
+            List<Point> neighbors = DIAGONAL_CARDINAL_NEIGHBORS
+                    .apply(pressed)
+                    .filter(p -> world.withinBounds(p))
+                    .toList();
 
-        // First check if space is not occupied
-        if(!world.isOccupied(pressed)){
+            neighbors.forEach(val -> {
+                // Transform dudes in this area
+
+                Background[][] background = world.getBackground();
+                if (world.isOccupied(val) && world.getOccupancyCell(val).getClass() == Fairy.class) {
+                    world.removeEntityAt(val);
+                    Killer bruh = new Killer("blood_dude", val, imageStore.getImageList("killer"), 0.3, 0.1, imageStore);
+                    world.addEntity(bruh);
+                    bruh.scheduleActions(world, imageStore, scheduler);
+                }
+
+                background[val.getY()][val.getX()] = new Background("affected", imageStore.getImageList("blood"));
+                world.setBackground(background);
+            });
+
+            // First check if space is not occupied
             Killer killer = new Killer("blood_dude", pressed, imageStore.getImageList("killer"), 0.4, 0.1, imageStore);
             world.tryAddEntity(killer);
             killer.scheduleActions(world, imageStore, scheduler);

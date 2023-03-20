@@ -3,6 +3,8 @@ import processing.core.PImage;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * An entity that exists in the world. See EntityKind for the
@@ -36,7 +38,8 @@ public final class Killer implements Movable{
             move(world, fullTarget.get(), scheduler);
         } else {
             scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), getActionPeriod());
-        }}
+        }
+    }
 
     public boolean move(WorldModel world, Entity target, EventScheduler scheduler) {
         // Fix this
@@ -76,6 +79,12 @@ public final class Killer implements Movable{
         return newPos;
 
          */
+
+            Background[][] background = world.getBackground();
+            if (!background[position.getY()][position.getX()].getId().equals("bridge")) {
+                background[position.getY()][position.getX()] = new Background("affected", imageStore.getImageList("blood"));
+                world.setBackground(background);
+            }
 
 
 

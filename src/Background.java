@@ -26,4 +26,6 @@ public final class Background {
     public PImage getCurrentImage() {
         return getImages().get(getImageIndex());
     }
+
+    public String getId() {return id;}
 }
