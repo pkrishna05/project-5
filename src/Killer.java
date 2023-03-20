@@ -42,10 +42,9 @@ public final class Killer implements Movable{
         // Fix this
         if (position.adjacent(target.getPosition())) {
                 // Creats and adds corpse
-                Corpse corpse = new Corpse("corpse", target.getPosition(), imageStore.getImageList("corpse"), 0.05, 0.5);
+                Corpse corpse = new Corpse("corpse", target.getPosition(), imageStore.getImageList("corpse"), 0.05, 0.4);
                 world.removeEntity(scheduler, target); // Removes target from the world
                 world.addEntity(corpse);
-
                 // Executes corpse activity
                 corpse.executeActivity(world, imageStore, scheduler);
                 this.executeActivity(world, imageStore, scheduler); // Finds new dude target

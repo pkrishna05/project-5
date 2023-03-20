@@ -31,7 +31,7 @@ public final class Fairy implements Movable{
             Point tgtPos = fairyTarget.get().getPosition();
 
             if (fairyTarget.get().getClass() == Corpse.class){
-                if(((Corpse) fairyTarget.get()).getGracePeriod() > 5){
+                if(((Corpse) fairyTarget.get()).getGracePeriod() > 20){
                     if(move(world, fairyTarget.get(), scheduler)){
                         scheduler.unscheduleAllEvents(fairyTarget.get());
                         DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.4, 0.3);
