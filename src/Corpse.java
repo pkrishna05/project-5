@@ -28,7 +28,7 @@ public final class Corpse implements Executable{
         this.gracePeriod++;
         System.out.println(gracePeriod);
         scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
-        scheduler.scheduleEvent(this, Animation.createAnimationAction(this, 1), this.actionPeriod);
+        scheduler.scheduleEvent(this, Animation.createAnimationAction(this, 1), this.animationPeriod);
     }
 
     public double getAnimationPeriod() {

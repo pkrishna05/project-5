@@ -36,9 +36,7 @@ public final class Sapling implements Plant{
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
         this.health++;
-        if (!transformPlant(world, scheduler, imageStore)) {
-            scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
-        }
+        Plant.super.executeActivity(world, imageStore, scheduler);
     }
 
     private double getNumFromRange(double max, double min) {

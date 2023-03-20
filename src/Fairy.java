@@ -31,7 +31,7 @@ public final class Fairy implements Movable{
             Point tgtPos = fairyTarget.get().getPosition();
 
             if (fairyTarget.get().getClass() == Corpse.class){
-                if(((Corpse) fairyTarget.get()).getGracePeriod() > 20){
+                if(((Corpse)fairyTarget.get()).getGracePeriod() > 10){
                     if(move(world, fairyTarget.get(), scheduler)){
                         scheduler.unscheduleAllEvents(fairyTarget.get());
                         DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.4, 0.3);
@@ -70,22 +70,6 @@ public final class Fairy implements Movable{
     }
 
     public Point nextPosition(WorldModel world, Point destPos) {
-        /*
-        int horiz = Integer.signum(destPos.getX() - position.getX());
-        Point newPos = new Point(position.getX() + horiz, position.getY());
-
-        if (horiz == 0 || world.isOccupied(newPos)) {
-            int vert = Integer.signum(destPos.getY() - position.getY());
-            newPos = new Point(position.getX(), position.getY() + vert);
-
-            if (vert == 0 || world.isOccupied(newPos)) {
-                newPos = position;
-            }
-        }
-
-        return newPos;
-
-         */
 
         PathingStrategy path = new AStarPathingStrategy();
         List<Point> points = path.computePath(getPosition(), destPos, p ->  world.withinBounds(p) && !world.isOccupied(p),

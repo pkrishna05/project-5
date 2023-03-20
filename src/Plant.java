@@ -6,8 +6,11 @@ public interface Plant extends Executable {
 
     boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore);
 
-    default boolean transformPlant(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        return transform(world, scheduler, imageStore);
-    }
 
+    @Override
+    default void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
+        if (!transform(world, scheduler, imageStore)) {
+            scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.getActionPeriod());
+        }
+    }
 }

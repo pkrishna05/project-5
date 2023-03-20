@@ -26,13 +26,6 @@ public final class Tree implements Plant{
         this.health = health;
     }
 
-    public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-
-        if (!transformPlant(world, scheduler, imageStore)) {
-
-            scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
-        }
-    }
 
     public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
         if (health <= 0) {
