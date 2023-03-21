@@ -50,17 +50,8 @@ public final class Sapling implements Plant{
     }
 
     public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        if (health <= 0) {
-
-            Entity stump = CreateEntity.createStump(CreateEntity.STUMP_KEY + "_" + id, position, imageStore.getImageList(CreateEntity.STUMP_KEY));
-
-            world.removeEntity(scheduler, this);
-
-            world.addEntity(stump);
-
+        if (Plant.super.transform(world, scheduler, imageStore)) {
             return true;
-
-
         } else if (health >= healthLimit) {
 
             Actionable tree = CreateEntity.createTree(CreateEntity.TREE_KEY + "_" + id, position, getNumFromRange(TREE_ACTION_MAX, TREE_ACTION_MIN), getNumFromRange(TREE_ANIMATION_MAX, TREE_ANIMATION_MIN), getIntFromRange(TREE_HEALTH_MAX, TREE_HEALTH_MIN), imageStore.getImageList(CreateEntity.TREE_KEY));
@@ -71,12 +62,9 @@ public final class Sapling implements Plant{
             tree.scheduleActions(world, imageStore, scheduler);
 
             return true;
-
         }
-
         return false;
     }
-
 
     public double getAnimationPeriod() {
         return animationPeriod;
@@ -117,6 +105,4 @@ public final class Sapling implements Plant{
     public void setHealth(int health) {
         this.health = health;
     }
-
-
 }

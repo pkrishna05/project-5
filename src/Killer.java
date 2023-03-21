@@ -63,20 +63,13 @@ public final class Killer implements Movable{
     }
 
     public Point nextPosition(WorldModel world, Point destPos) {
-            Background[][] background = world.getBackground();
-            if (!background[position.getY()][position.getX()].getId().equals("bridge")) {
-                background[position.getY()][position.getX()] = new Background("affected", imageStore.getImageList("blood"));
-                world.setBackground(background);
-            }
+        Background[][] background = world.getBackground();
+        if (!background[position.getY()][position.getX()].getId().equals("bridge")) {
+            background[position.getY()][position.getX()] = new Background("affected", imageStore.getImageList("blood"));
+            world.setBackground(background);
+        }
 
-
-
-        PathingStrategy path = new AStarPathingStrategy();
-        List<Point> points = path.computePath(getPosition(), destPos, p ->  world.withinBounds(p) && !world.isOccupied(p),
-                (p1, p2) -> p1.adjacent(p2), PathingStrategy.CARDINAL_NEIGHBORS);
-        return points.size() > 0 ? points.get(0) : getPosition();
-
-
+        return Movable.super.nextPosition(world, destPos);
 
     }
 

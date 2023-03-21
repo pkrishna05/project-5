@@ -70,11 +70,12 @@ public final class VirtualWorld extends PApplet {
     // Be sure to refactor this method as appropriate
     public void mousePressed() {
         Point pressed = mouseToPoint();
-        System.out.println("CLICK! " + pressed.getX() + ", " + pressed.getY());
 
+        // Checks if not occupied
         if (!world.isOccupied(pressed)) {
 
-            final Function<Point, Stream<Point>> DIAGONAL_CARDINAL_NEIGHBORS =
+            // Gets stream of valid neighbors
+            final Function<Point, Stream<Point>> DIAGONAL_CARDINAL_NEIGHBORS_AND_MORE =
                     point ->
                             Stream.<Point>builder()
                                     .add(new Point(point.x - 1, point.y - 1))
@@ -91,32 +92,26 @@ public final class VirtualWorld extends PApplet {
                                     .add(new Point(point.x + 2, point.y))
                                     .build();
 
-            // Sets background tiles
-
-            List<Point> neighbors = DIAGONAL_CARDINAL_NEIGHBORS
+            List<Point> neighbors = DIAGONAL_CARDINAL_NEIGHBORS_AND_MORE
                     .apply(pressed)
                     .filter(p -> world.withinBounds(p))
                     .toList();
 
             neighbors.forEach(val -> {
-                // Transform dudes in this area
-
+                // Transforms fairies and tiles in this area
                 Background[][] background = world.getBackground();
                 if (world.isOccupied(val) && world.getOccupancyCell(val).getClass() == Fairy.class) {
                     world.removeEntityAt(val);
-                    Killer bruh = new Killer("blood_dude", val, imageStore.getImageList("killer"), 0.3, 0.1, imageStore);
-                    world.addEntity(bruh);
-                    bruh.scheduleActions(world, imageStore, scheduler);
+                    CreateEntity.createKiller(val, imageStore, world, scheduler);
                 }
 
+                // Changes background tiles
                 background[val.getY()][val.getX()] = new Background("affected", imageStore.getImageList("blood"));
                 world.setBackground(background);
             });
 
-            // First check if space is not occupied
-            Killer killer = new Killer("blood_dude", pressed, imageStore.getImageList("killer"), 0.4, 0.1, imageStore);
-            world.tryAddEntity(killer);
-            killer.scheduleActions(world, imageStore, scheduler);
+            // Spawns a new killer on the spot
+            CreateEntity.createKiller(pressed, imageStore, world, scheduler);
         }
 
     }
@@ -126,7 +121,6 @@ public final class VirtualWorld extends PApplet {
             if(entity instanceof Actionable){
                 ((Actionable)entity).scheduleActions(world, imageStore, scheduler);
             }
-
         }
     }
 

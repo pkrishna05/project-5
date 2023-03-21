@@ -43,7 +43,6 @@ public final class Fairy implements Movable{
             } else {
                 if(move(world, fairyTarget.get(), scheduler)){
                     Actionable sapling = CreateEntity.createSapling(CreateEntity.SAPLING_KEY + "_" + fairyTarget.get().getId(), tgtPos, imageStore.getImageList(CreateEntity.SAPLING_KEY));
-
                     world.addEntity(sapling);
                     sapling.scheduleActions(world, imageStore, scheduler);
                 }
@@ -60,21 +59,8 @@ public final class Fairy implements Movable{
             world.removeEntityAt(target.getPosition());
             return true;
         } else {
-            Point nextPos = nextPosition(world, target.getPosition());
-
-            if (!position.equals(nextPos)) {
-                world.moveEntity(scheduler, this, nextPos);
-            }
-            return false;
+            return Movable.super.move(world, target, scheduler);
         }
-    }
-
-    public Point nextPosition(WorldModel world, Point destPos) {
-
-        PathingStrategy path = new AStarPathingStrategy();
-        List<Point> points = path.computePath(getPosition(), destPos, p ->  world.withinBounds(p) && !world.isOccupied(p),
-                (p1, p2) -> p1.adjacent(p2), PathingStrategy.CARDINAL_NEIGHBORS);
-        return points.size() > 0 ? points.get(0) : getPosition();
     }
 
     public double getAnimationPeriod() {

@@ -44,4 +44,10 @@ public class CreateEntity {
     public static Tree createTree(String id, Point position, double actionPeriod, double animationPeriod, int health, List<PImage> images) {
         return new Tree(id, position, images, actionPeriod, animationPeriod, health);
     }
+
+    public static void createKiller(Point pos, ImageStore imageStore, WorldModel world, EventScheduler scheduler){
+        Killer killer = new Killer("blood_dude", pos, imageStore.getImageList("killer"), 0.3, 0.1, imageStore);
+        world.addEntity(killer);
+        killer.scheduleActions(world, imageStore, scheduler);
+    }
 }

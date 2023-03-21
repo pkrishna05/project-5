@@ -36,12 +36,7 @@ public final class DudeFull extends Dude{
         if (super.getPosition().adjacent(target.getPosition())) {
             return true;
         } else {
-            Point nextPos = nextPosition(world, target.getPosition());
-
-            if (!super.getPosition().equals(nextPos)) {
-                world.moveEntity(scheduler, this, nextPos);
-            }
-            return false;
+            return super.move(world, target, scheduler);
         }
     }
 

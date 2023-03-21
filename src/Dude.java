@@ -36,7 +36,6 @@ public abstract class Dude implements Movable{
 
     abstract boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore);
 
-
     public String getId() {
         return id;
     }

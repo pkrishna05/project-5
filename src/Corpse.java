@@ -25,10 +25,10 @@ public final class Corpse implements Executable{
 
     @Override
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
+        // Unique Code, can't inherit
         this.gracePeriod++;
-        System.out.println(gracePeriod);
         scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
-        scheduler.scheduleEvent(this, Animation.createAnimationAction(this, 1), this.animationPeriod);
+        scheduler.scheduleEvent(this, Animation.createAnimationAction(this, 2), this.animationPeriod);
     }
 
     public double getAnimationPeriod() {

@@ -26,21 +26,6 @@ public final class Tree implements Plant{
         this.health = health;
     }
 
-
-    public boolean transform(WorldModel world, EventScheduler scheduler, ImageStore imageStore) {
-        if (health <= 0) {
-            Entity stump = CreateEntity.createStump(CreateEntity.STUMP_KEY + "_" + id, position, imageStore.getImageList(CreateEntity.STUMP_KEY));
-
-            world.removeEntity(scheduler, this);
-
-            world.addEntity(stump);
-
-            return true;
-        }
-
-        return false;
-    }
-
     public double getAnimationPeriod() {
         return animationPeriod;
     }

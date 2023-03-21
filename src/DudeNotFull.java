@@ -41,17 +41,12 @@ public final class DudeNotFull extends Dude{
     public boolean move(WorldModel world, Entity target, EventScheduler scheduler) {
         if (super.getPosition().adjacent(target.getPosition())) {
             this.resourceCount += 1;
-            if(target instanceof Plant){ // TODO: Ask about this
-                ((Plant)target).setHealth(((Plant)target).getHealth()-1);
+            if (target instanceof Plant) {
+                ((Plant) target).setHealth(((Plant) target).getHealth() - 1);
             }
             return true;
         } else {
-            Point nextPos = nextPosition(world, target.getPosition());
-
-            if (!super.getPosition().equals(nextPos)) {
-                world.moveEntity(scheduler, this, nextPos);
-            }
-            return false;
+            return super.move(world, target, scheduler);
         }
     }
 
