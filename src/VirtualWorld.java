@@ -102,7 +102,7 @@ public final class VirtualWorld extends PApplet {
                 Background[][] background = world.getBackground();
                 if (world.isOccupied(val) && world.getOccupancyCell(val).getClass() == Fairy.class) {
                     world.removeEntityAt(val);
-                    CreateEntity.createKiller(val, imageStore, world, scheduler);
+                    CreateEntity.createHealer("healer", val, 0.1, 0.2, imageStore.getImageList("healer"), world, imageStore, scheduler);
                 }
 
                 // Changes background tiles

@@ -50,4 +50,10 @@ public class CreateEntity {
         world.addEntity(killer);
         killer.scheduleActions(world, imageStore, scheduler);
     }
+
+    public static void createHealer(String id, Point position, double actionPeriod, double animationPeriod, List<PImage> images, WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
+        Healer healer = new Healer(id, position, images, actionPeriod, animationPeriod);
+        world.addEntity(healer);
+        healer.scheduleActions(world, imageStore, scheduler);
+    }
 }

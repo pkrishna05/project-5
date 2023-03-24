@@ -41,7 +41,6 @@ sapling images/sapling4.png
 blood images/blood_floor.png
 killer images/killer1.png
 killer images/killer2.png
-amongus images/amongus.png
 corpse images/corpse1.png
 corpse images/corpse1.png
 corpse images/corpse1.png
@@ -50,3 +49,5 @@ corpse images/corpse2.png
 corpse images/corpse3.png
 corpse images/corpse3.png
 corpse images/corpse4.png
+healer images/healer1.png
+healer images/healer2.png

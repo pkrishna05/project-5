@@ -6,7 +6,7 @@ import java.util.*;
  * An entity that exists in the world. See EntityKind for the
  * different kinds of entities that exist.
  */
-public final class Fairy implements Movable{
+public final class Healer implements Movable{
     private final String id;
     private Point position;
     private final List<PImage> images;
@@ -14,7 +14,7 @@ public final class Fairy implements Movable{
     private final double actionPeriod;
     private final double animationPeriod;
 
-    public Fairy(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
+    public Healer(String id, Point position, List<PImage> images, double actionPeriod, double animationPeriod) {
         this.id = id;
         this.position = position;
         this.images = images;
@@ -25,17 +25,22 @@ public final class Fairy implements Movable{
 
 
     public void executeActivity(WorldModel world, ImageStore imageStore, EventScheduler scheduler) {
-        Optional<Entity> fairyTarget = world.findNearest(this.position, new ArrayList<>(List.of(Stump.class)));
+        Optional<Entity> target = world.findNearest(this.position, new ArrayList<>(List.of(Corpse.class)));
 
-        if (fairyTarget.isPresent()) {
-            Point tgtPos = fairyTarget.get().getPosition();
+        if (target.isPresent()) {
+            Point tgtPos = target.get().getPosition();
 
-                if(move(world, fairyTarget.get(), scheduler)){
-                    Actionable sapling = CreateEntity.createSapling(CreateEntity.SAPLING_KEY + "_" + fairyTarget.get().getId(), tgtPos, imageStore.getImageList(CreateEntity.SAPLING_KEY));
-                    world.addEntity(sapling);
-                    sapling.scheduleActions(world, imageStore, scheduler);
+                if(((Corpse)target.get()).getGracePeriod() > 10){
+                    if(move(world, target.get(), scheduler)){
+                        scheduler.unscheduleAllEvents(target.get());
+                        DudeNotFull dude = new DudeNotFull("dudeNotFull", tgtPos, imageStore.getImageList("dude"), 1, 0, 0.4, 0.3);
+                        world.addEntity(dude);
+                        dude.scheduleActions(world, imageStore, scheduler);
+                    }
+
                 }
         }
+
         scheduler.scheduleEvent(this, Activity.createActivityAction(this, world, imageStore), this.actionPeriod);
     }
 
